@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <script src="https://kit.fontawesome.com/d31dc90224.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <nav class="header">
+      <div class="h-container">
+        <div class="h-left">
+          <img src="img/instagram.png" class="logo" />
+          <div class="hl-bar"></div>
+          <img
+            src="img/instagram-new-logo.png"
+            alt="Instagram"
+            class="hl-text"
+          />
+        </div>
+        <div class="h-center left-addon">
+          <img src="img/search-icon.png" class="searchicon" />
+          <input type="text" class="searchbox" placeholder="Search" />
+        </div>
+        <div class="h-right">
+          <a href="index.html">
+            <img src="img/compass.png" alt="Discover" class="icons" />
+          </a>
+          <a href="index.html"
+            ><img src="img/heart.png" alt="Heart" class="icons"
+          /></a>
+          <a href="index.html">
+            <img src="img/user.png" alt="User" class="icons" />
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="info-container">
+        <div class="info">
+          <a id="info-logo"></a>
+          <div class="info-specs">
+            <p id="hashtag"></p>
+            <p id="posts"><span id="n-posts"></span> posts</p>
+            <button id="follow">Follow</button>
+          </div>
+        </div>
+      </div>
+      <div class="article-container">
+        <div id="article">
+          <p id="t-p">Top Posts</h2>
+          <div id="photos-container">
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      fetch(
+        "https://api.unsplash.com/search/photos/?query=football&client_id=009a9e24f1e398e83ec7a72509fc9c263def33ae30c607c3388e429a99c4e792&page=1&per_page=28&orientation=squarish"
+      )
+        .then(res => {
+          console.log("Res1", res);
+          let hash = res.url.split("=")[1].split("&")[0];
+          let response = res.json(hash).then(res => {
+            res.hash = hash;
+            return res;
+          });
+          return response;
+        })
+        .then(res => {
+          console.log(res);
+
+          let logoLink = document.getElementById("info-logo");
+          let img = document.createElement("img");
+          let hashElement = document.getElementById("hashtag");
+          let nPostsElement = document.getElementById("n-posts");
+
+          img.style.width = "152px";
+          img.style.height = "152px";
+          img.style.borderRadius = "50%";
+          img.setAttribute("src", res.results[0].urls.full);
+          logoLink.setAttribute("href", res.results[0].links.html);
+          logoLink.append(img);
+
+          hashElement.innerHTML = `#${res.hash}`;
+          nPostsElement.style.fontWeight = "bolder";
+          nPostsElement.innerHTML = `<b>${res.total}</b>`;
+
+          let photosContElement = document.getElementById('photos-container');
+          let photosArr = res.results.slice(1);
+          let photos = photosArr.map(photo => {
+            let photosParentElement = document.createElement('a');
+            let photoDiv = document.createElement('div');
+            photosParentElement.setAttribute('class', 'photoParent');
+            photosParentElement.setAttribute('href', photo.links.html);
+            photoDiv.setAttribute('class', 'photoDiv');
+            photoDiv.style.backgroundImage = "url('"+photo.urls.thumb+"')" ;
+            photosParentElement.append(photoDiv);
+            photosContElement.append(photosParentElement);
+          })
+
+        }).catch(err => console.log(err));
+
+        document.querySelector('.searchbox').addEventListener('keyup', event => {
+          event.preventDefault();
+            if(event.keyCode === 13){
+                searchHashtag()
+            }
+        });
+
+        function searchHashtag() {
+          document.getElementById('info-logo').innerHTML = '';
+          document.getElementById('photos-container').innerHTML = '';
+            
+          fetch(`https://api.unsplash.com/search/photos/?query=${document.querySelector('input').value}&client_id=009a9e24f1e398e83ec7a72509fc9c263def33ae30c607c3388e429a99c4e792&page=1&per_page=28&orientation=squarish`
+        )
+        .then(res => {
+          console.log("Res1", res);
+          let hash = res.url.split("=")[1].split("&")[0];
+          let response = res.json(hash).then(res => {
+            res.hash = hash;
+            return res;
+          });
+          return response;
+        })
+        .then(res => {
+          console.log(res);
+
+          let logoLink = document.getElementById("info-logo");
+          let img = document.createElement("img");
+          let hashElement = document.getElementById("hashtag");
+          let nPostsElement = document.getElementById("n-posts");
+
+          img.style.width = "152px";
+          img.style.height = "152px";
+          img.style.borderRadius = "50%";
+          img.setAttribute("src", res.results[0].urls.full);
+          logoLink.setAttribute("href", res.results[0].links.html);
+          logoLink.append(img);
+
+          hashElement.innerHTML = `#${res.hash}`;
+          nPostsElement.style.fontWeight = "bolder";
+          nPostsElement.innerHTML = `<b>${res.total}</b>`;
+
+          let photosContElement = document.getElementById('photos-container');
+          let photosArr = res.results.slice(1);
+          let photos = photosArr.map(photo => {
+            let photosParentElement = document.createElement('a');
+            let photoDiv = document.createElement('div');
+            photosParentElement.setAttribute('class', 'photoParent');
+            photosParentElement.setAttribute('href', photo.links.html);
+            photoDiv.setAttribute('class', 'photoDiv');
+            photoDiv.style.backgroundImage = "url('"+photo.urls.thumb+"')" ;
+            photosParentElement.append(photoDiv);
+            photosContElement.append(photosParentElement);
+          })
+
+        }).catch(err => console.log(err));
+
+        } 
+    </script>
+  </body>
+</html>

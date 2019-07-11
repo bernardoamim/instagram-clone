@@ -17,12 +17,12 @@ As I was making an Instagram clone I used photos that were squarish, but you can
 
 Here's an example of how I used the 'fetch':
 
-"https://api.unsplash.com/search/photos/?query=<SEARCHPARAM>&client_id=<YOURACCESSKEY>&page=1&per_page=28&orientation=squarish"
+"https://api.unsplash.com/search/photos/?query={SEARCHPARAM}&client_id={YOURACCESSKEY}&page=1&per_page=28&orientation=squarish"
   
 I'm not the king of the world! So, if you find a better way to do that, feel free to have fun with it!
 
 
 Thank you! Any questions, please contact me! Oh, and plz, help me out with a star??
 
-Hugs
+Hugs! :)
 
